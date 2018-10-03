@@ -1,4 +1,4 @@
-package com.msrestudiante.msrestudiante;
+package com.msrestudiante;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,4 +1,4 @@
-package com.msrestudiante.msrestudiante.Entidades;
+package com.msrestudiante.Entidades;
 
 
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -11,12 +11,9 @@ public class Estudiante {
     private String Id;
     private String Nombre;
     private String Apellido;
-    @Indexed(unique = true)
+
     private String Carne;
 
-    public Estudiante(String id) {
-        Id = id;
-    }
 
     public String getId() {
         return Id;
