@@ -8,19 +8,28 @@ import org.springframework.data.annotation.Id;
 @Document(collection = "estudiante")
 public class Estudiante {
     @Id
-    private String Id;
+    private String id;
     private String Nombre;
     private String Apellido;
 
     private String Carne;
 
+    public Estudiante() {
+    }
+
+    public Estudiante(String nombre, String apellido, String carne) {
+
+        this.Nombre = nombre;
+        this.Apellido = apellido;
+        this.Carne = carne;
+    }
 
     public String getId() {
-        return Id;
+        return id;
     }
 
     public void setId(String id) {
-        Id = id;
+        id = id;
     }
 
     public String getNombre() {

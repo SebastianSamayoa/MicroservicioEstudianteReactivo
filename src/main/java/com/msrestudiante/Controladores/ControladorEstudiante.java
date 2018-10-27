@@ -3,30 +3,45 @@ package com.msrestudiante.Controladores;
 import com.msrestudiante.Entidades.Estudiante;
 import com.msrestudiante.Repositorios.EstudianteRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.ReplayProcessor;
+
+import java.time.Duration;
+
+import static org.springframework.http.MediaType.TEXT_EVENT_STREAM_VALUE;
 
 @RestController
 @CrossOrigin
 @RequestMapping("/estudiante")
-//@EnableMongoRepositories(basePackages = "com.msrestudiante.Repositorios")
+
 public class ControladorEstudiante {
 
+    private ReplayProcessor<ServerSentEvent<Estudiante>> replayProcessor =
+            ReplayProcessor.<ServerSentEvent<Estudiante>>create();
+
+
     @Autowired
-    EstudianteRepositorio estudiante;
+    private EstudianteRepositorio estudiante;
 
     @RequestMapping(
             value = "/all",
             method = RequestMethod.GET,
             produces = "application/json"
     )
-    public List<Estudiante> getall(){
-        List<Estudiante> result = estudiante.findAll();
-        return result;
+    public Flux<Estudiante> getall(){
+        return estudiante.findAll().delayElements(Duration.ofMillis(1000));
     }
 
-    @RequestMapping("/saluda")
-    public String saludo(){
-        return "Hola Mundo";
+
+    @GetMapping(
+            value = "/reactivo",
+            produces = TEXT_EVENT_STREAM_VALUE
+    )
+    public Flux<Estudiante> getReactive(){
+        return estudiante.findWithTailableCursorBy()
+                .delayElements(Duration.ofMillis(1000));
     }
+
 }
