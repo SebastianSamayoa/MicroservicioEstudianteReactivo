@@ -31,7 +31,7 @@ public class ControladorEstudiante {
             produces = "application/json"
     )
     public Flux<Estudiante> getall(){
-        return estudiante.findAll().delayElements(Duration.ofMillis(1000));
+        return estudiante.findAll();
     }
 
 
