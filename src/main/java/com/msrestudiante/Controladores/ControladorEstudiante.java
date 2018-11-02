@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.core.publisher.ReplayProcessor;
 
 import java.time.Duration;
@@ -23,7 +24,7 @@ public class ControladorEstudiante {
 
 
     @Autowired
-    private EstudianteRepositorio estudiante;
+    private EstudianteRepositorio repoestudiante;
 
     @RequestMapping(
             value = "/all",
@@ -31,7 +32,7 @@ public class ControladorEstudiante {
             produces = "application/json"
     )
     public Flux<Estudiante> getall(){
-        return estudiante.findAll();
+        return repoestudiante.findAll();
     }
 
 
@@ -40,8 +41,16 @@ public class ControladorEstudiante {
             produces = TEXT_EVENT_STREAM_VALUE
     )
     public Flux<Estudiante> getReactive(){
-        return estudiante.findWithTailableCursorBy()
+        return repoestudiante.findWithTailableCursorBy()
                 .delayElements(Duration.ofMillis(1000));
+    }
+
+    @PostMapping(
+            value = "/crear",
+            produces = "application/json"
+    )
+    public Mono<Estudiante> crearestudiante(@RequestBody Estudiante estudiante){
+        return repoestudiante.save(estudiante);
     }
 
 }
