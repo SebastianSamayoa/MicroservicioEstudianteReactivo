@@ -50,6 +50,9 @@ public class ControladorEstudiante {
             produces = "application/json"
     )
     public Mono<Estudiante> crearestudiante(@RequestBody Estudiante estudiante){
+
+        System.out.println(estudiante.getNombre());
+
         return repoestudiante.save(estudiante);
     }
 
